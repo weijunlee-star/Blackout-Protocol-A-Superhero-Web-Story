@@ -1,0 +1,317 @@
+/* ==========================================================
+   BLACKOUT PROTOCOL - external stylesheet
+   Palette: night indigo, Lumen cyan, Ash amber, ECHO violet, alert red
+   ========================================================== */
+
+/* 1. DESIGN TOKENS (CSS variables keep colours consistent) */
+:root {
+  --night: #0a0920;      /* page background */
+  --panel: #1a1748;      /* panel / card background */
+  --ink: #f3f1ff;        /* main text (high contrast on night) */
+  --lumen: #19d3f0;      /* hero cyan */
+  --ash: #ffb02e;        /* antihero amber */
+  --echo: #9b7bff;       /* AI violet */
+  --alert: #ff3b5c;      /* twist / danger red */
+  --display: "Bungee", "Impact", sans-serif;
+  --body: "Atkinson Hyperlegible", Arial, sans-serif;
+}
+
+/* 2. BASE */
+* {box-sizing: border-box;
+}
+
+html {scroll-behavior: smooth;
+}
+
+body {margin: 0;
+background: var(--night);
+color: var(--ink); font: 1.05rem/1.6 var(--body);
+}
+
+h1, h2, h3 {font-family: var(--display);
+font-weight: 400; line-height: 1.1;
+}
+
+a {color: var(--lumen);
+}
+:focus-visible { outline: 3px solid var(--ash);
+outline-offset: 3px;
+} /* visible keyboard focus */
+
+/* 3. HEADER + NAVIGATION (sticky bar, wraps on small screens) */
+.site-header {position: sticky;
+top: 0;z-index: 10;
+display: flex;
+flex-wrap: wrap;
+gap: .5rem 2rem;
+justify-content: space-between;
+align-items: center; padding: .8rem 5vw;
+background: rgba(10,9,32,.92);
+border-bottom: 3px solid var(--lumen);
+}
+
+.brand {font-family: var(--display);
+font-size: 1.2rem;
+color: var(--ink);
+text-decoration: none;
+}
+
+nav ul {display: flex;
+flex-wrap: wrap; gap: 1.2rem;
+list-style: none; margin: 0;
+padding: 0;
+}
+
+nav a {color: var(--ink);
+text-decoration: none;
+position: relative;
+}
+
+/* pseudo-element underline that grows on hover */
+
+nav a::after {content: "";
+position: absolute;
+left: 0;
+bottom: -4px;
+width: 0;
+height: 3px;
+background: var(--ash);
+transition: width .25s;
+}
+
+nav a:hover::after, nav a:focus-visible::after { width: 100%; }
+
+/* 4. HERO - the one big moment: the title flickers like a failing grid */
+.hero {min-height: 80vh;
+display: grid;
+place-content: center;
+justify-items: start;
+gap: 1.5rem; padding: 8vh 5vw;
+}
+
+.hero h1 { position: relative;
+margin: 0;
+font-size: clamp(2.6rem, 10vw, 7rem);
+color: var(--lumen);
+animation: flicker 2.4s 1 both;
+}
+
+/* pseudo-element duplicates the title as an offset red "glitch" layer */
+.glitch::before { content: attr(data-text);
+position: absolute;
+left: 4px; top: 3px;
+color: var(--alert);
+z-index: -1;
+}
+
+.tagline { max-width: 34ch;
+font-size: 1.3rem;
+}
+
+@keyframes flicker { /* lights cut out, then power back on */
+  0%, 18%, 22%, 60%, 64% { opacity: .08; }
+  20%, 62%, 70%, 100% { opacity: 1; }
+}
+
+/* 5. BUTTONS */
+.btn { display: inline-block;
+padding: .8rem 1.6rem;
+background: var(--ash); color: #1a1000;
+border: 3px solid #1a1000;
+box-shadow: 5px 5px 0 var(--lumen);
+font: 1.1rem var(--display);
+text-decoration: none;
+cursor: pointer;
+transition: transform .15s, box-shadow .15s;
+}
+
+.btn:hover { transform: translate(3px, 3px);
+box-shadow: 2px 2px 0 var(--lumen);
+}
+
+/* 6. SECTIONS */
+.section { padding: 4rem 5vw;
+max-width: 1150px;
+margin: 0 auto;
+scroll-margin-top: 4.5rem;
+}
+
+.section h2 { font-size: clamp(1.8rem, 5vw, 3rem);
+margin: 0 0 1.5rem;
+}
+
+/* 7. COMIC PANELS (grid layout; the wide panel spans both columns) */
+.panels { display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1.2rem;
+}
+
+.panel { position: relative;
+overflow: hidden; padding: 1.5rem;
+background: var(--panel);
+border: 4px solid var(--ink);
+box-shadow: 8px 8px 0 var(--echo);
+}
+
+.panel h3 { margin-top: 0;
+color: var(--ash);
+font-size: 1.3rem;
+}
+
+.p-wide { grid-column: 1 / -1;
+}
+
+/* halftone dots made from a pseudo-element */
+.panel::after { content: "";
+position: absolute; right: -20px;
+bottom: -20px; width: 140px; height: 140px;
+background: radial-gradient(circle, rgba(255,255,255,.12) 20%, transparent 22%) 0 0 / 14px 14px; pointer-events: none;
+}
+
+.twist { grid-column: 1 / -1; border-color: var(--alert);
+box-shadow: 8px 8px 0 var(--alert);
+}
+
+.twist h3 { color: var(--alert);
+}
+
+.banner { margin: 2.5rem 0 0;
+}
+
+.banner img, video { width: 100%;
+height: auto;
+display: block;
+background: var(--panel);
+border: 4px solid var(--ink);
+min-height: 180px;
+}
+
+figcaption { margin-top: .5rem;
+font-size: .9rem;
+opacity: .85;
+}
+
+/* 8. CAST CARDS (auto-fit grid = responsive without media queries) */
+.cast-grid { display: grid;
+grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+gap: 1.2rem;
+}
+
+.card { padding: 1.4rem;
+background: var(--panel);
+border-top: 8px solid var(--c);
+transition: transform .2s; }
+.card h3 { margin: 0 0 .5rem;
+color: var(--c);
+}
+
+.card:hover { transform: translateY(-6px);
+}
+
+.hero-c { --c: var(--lumen);
+} 
+
+.anti-c { --c: var(--ash);
+} 
+
+.side-c { --c: #7dff9b;
+} 
+
+.ai-c { --c: var(--echo);
+}
+
+/* ECHO's card pulses like a watching eye */
+.ai-c 
+h3::before { content: "";
+display: inline-block;
+width: .6em;
+height: .6em;
+margin-right: .4em; border-radius: 50%;
+background: var(--echo);
+animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(155,123,255,.8); } 50% { box-shadow: 0 0 0 10px rgba(155,123,255,0); } }
+
+/* 9. TABLES */
+.table-wrap { overflow-x: auto;
+} /* wide tables scroll inside, never break the page */
+
+table { width: 100%;
+border-collapse: collapse;
+background: var(--panel); }
+
+caption { padding: .6rem;
+text-align: left;
+font-weight: 700;
+}
+
+th, td { padding: .7rem 1rem; border: 2px solid var(--night);
+text-align: left;
+vertical-align: top;
+}
+
+thead th { background: var(--lumen);
+color: #04202a;
+}
+
+tbody tr:nth-child(even) { background: rgba(255,255,255,.05); }
+
+.wide { width: 40%; }
+
+.inner { background: transparent; } .inner th, .inner td { padding: .2rem .5rem; border: 0; }
+
+.inner th { color: var(--ash); }
+
+.links a { margin: 0 .3rem; }
+
+/* 10. MEDIA */
+.media-grid { display: grid;
+grid-template-columns: 2fr 1fr;
+gap: 1.5rem; align-items: start;
+}
+
+audio { width: 100%;
+}
+
+/* 11. FORM */
+.registry { display: grid;
+gap: .6rem;
+max-width: 560px;
+padding: 1.5rem;
+background: var(--panel);
+border: 4px solid var(--ink);
+}
+
+label { font-weight: 700; }
+
+input[type="text"], input[type="email"], select, textarea { width: 100%; padding: .6rem; font: inherit; color: var(--ink); background: var(--night); border: 2px solid var(--echo); }
+
+input:invalid:not(:placeholder-shown) { border-color: var(--alert); } /* error state for bad input */
+
+input:valid:not(:placeholder-shown) { border-color: #7dff9b; }      /* success state */
+
+fieldset { border: 2px solid var(--echo); } 
+
+fieldset label { margin-right: 1rem; font-weight: 400; }
+
+.check { font-weight: 400; }
+
+/* 12. FOOTER */
+footer { padding: 2.5rem 5vw;
+text-align: center;
+border-top: 3px solid var(--echo);
+font-size: .95rem;
+}
+
+/* 13. RESPONSIVE: stack panels and media on tablets and phones */
+@media (max-width: 720px) {
+  .panels, .media-grid { grid-template-columns: 1fr; }
+  .p-wide, .twist { grid-column: auto; }
+  .hero { min-height: 70vh; }
+}
+
+/* 14. ACCESSIBILITY: respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
